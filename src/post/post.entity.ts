@@ -1,7 +1,7 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, BaseEntity } from 'typeorm';
 
 @Entity()
-export class User {
+export class PostEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -16,4 +16,10 @@ export class User {
 
   @Column()
   content: string;
+
+  @Column({ nullable: true })
+  category: string;
+
+  @Column()
+  thumbnail: string;
 }
