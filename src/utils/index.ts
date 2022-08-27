@@ -14,7 +14,7 @@ const mimeTypes: { [key: string]: string } = {
 
 export const saveFile = async (
   file: Express.Multer.File,
-  directory = 'uploads',
+  directory = 'upload',
 ): Promise<{ location: string }> => {
   const { filename, buffer, mimetype } = file;
   const extension = mimeTypes[mimetype];
