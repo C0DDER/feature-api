@@ -1,5 +1,5 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { PostEntity } from "../post/post.entity";
+import { PostEntity } from '../post/post.entity';
 
 // TODO use env variables
 export const TypeOrmConfig: TypeOrmModuleOptions = {

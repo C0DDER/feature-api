@@ -13,9 +13,7 @@ import {
 } from '@nestjs/common';
 import { CreatePostDto } from './post.dto';
 import { PostService } from './post.service';
-import {
-  FileInterceptor,
-} from '@nestjs/platform-express';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { PostEntity } from './post.entity';
 
 @Controller('post')

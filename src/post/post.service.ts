@@ -1,17 +1,20 @@
-import { BadRequestException, Injectable, Logger, NotFoundException } from "@nestjs/common";
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreatePostDto } from './post.dto';
 import { PostEntity } from './post.entity';
 import { saveFile } from '../utils';
-import { DeleteResult, FindManyOptions, Repository } from "typeorm";
-import { InjectRepository } from "@nestjs/typeorm";
+import { DeleteResult, FindManyOptions, Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class PostService {
   private readonly logger = new Logger(PostService.name);
 
-  async savePostValues(
-    createTaskDto: CreatePostDto,
-  ): Promise<PostEntity> {
+  async savePostValues(createTaskDto: CreatePostDto): Promise<PostEntity> {
     const post = new PostEntity();
     const { title, content, preview, file, author, category } = createTaskDto;
 
