@@ -14,7 +14,7 @@ export class CreatePostDto {
   content: string;
 
   @IsNotEmpty()
-  category: string;
+  category: number;
 
   file?: any;
 }

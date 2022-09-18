@@ -18,7 +18,7 @@ export class PostEntity extends BaseEntity {
   content: string;
 
   @Column({ nullable: true })
-  category: string;
+  category: number;
 
   @Column({ nullable: true })
   section: string;

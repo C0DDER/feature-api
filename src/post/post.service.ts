@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ConflictException,
   Injectable,
   Logger,
   NotFoundException,
@@ -9,14 +10,31 @@ import { PostEntity } from './post.entity';
 import { saveFile } from '../utils';
 import { DeleteResult, FindManyOptions, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Category } from '../category/category.entity';
 
 @Injectable()
 export class PostService {
   private readonly logger = new Logger(PostService.name);
 
+  constructor(
+    @InjectRepository(PostEntity)
+    private postRepository: Repository<PostEntity>,
+
+    @InjectRepository(Category)
+    private categoryRepository: Repository<Category>,
+  ) {}
+
   async savePostValues(createTaskDto: CreatePostDto): Promise<PostEntity> {
     const post = new PostEntity();
     const { title, content, preview, file, author, category } = createTaskDto;
+
+    const isCategoryExist = await this.categoryRepository.findOne({
+      where: { id: category },
+    });
+
+    if (!isCategoryExist) {
+      throw new ConflictException(`category: ${category} does not exist `);
+    }
 
     post.title = title;
     post.content = content;
@@ -30,23 +48,23 @@ export class PostService {
     return post;
   }
 
-  constructor(
-    @InjectRepository(PostEntity)
-    private postRepository: Repository<PostEntity>,
-  ) {}
-
   async createPost(createPostDto: CreatePostDto): Promise<PostEntity> {
-    try {
+    if (createPostDto.file) {
       const { location } = await saveFile(createPostDto.file);
       createPostDto.file = location;
-
-      const post = await this.savePostValues(createPostDto);
-      this.logger.log(`Post is created with id: ${post.id}`);
-      return post;
-    } catch (e) {
-      this.logger.error(e);
-      throw new BadRequestException(e);
     }
+
+    const post = await this.savePostValues(createPostDto);
+
+    if (!post) {
+      const errorMessage = 'post was not created';
+      this.logger.error(errorMessage);
+      throw new BadRequestException(errorMessage);
+    }
+
+    this.logger.log(`Post is created with id: ${post.id}`);
+
+    return post;
   }
 
   async getPostById(id: number): Promise<PostEntity> {
@@ -79,9 +97,10 @@ export class PostService {
   }
 
   async updatePost(createPostDto: CreatePostDto, id: number) {
-    const { location } = await saveFile(createPostDto.file);
-    console.log(location);
-    createPostDto.file = location;
+    if (createPostDto.file) {
+      const { location } = await saveFile(createPostDto.file);
+      createPostDto.file = location;
+    }
 
     const foundPost = await this.getPostById(id);
 

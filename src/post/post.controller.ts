@@ -56,10 +56,12 @@ export class PostController {
   updatePost(
     @Param('id') id: number,
     @Body() createPostDto: CreatePostDto,
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile() file?: Express.Multer.File,
   ) {
-    file.filename = new Date().getTime().toString();
-    createPostDto.file = file;
+    if (file) {
+      file.filename = new Date().getTime().toString();
+      createPostDto.file = file;
+    }
     return this.postService.updatePost(createPostDto, id);
   }
 }

@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { TypeOrmConfig } from './config/typeorm.config';
 import { PostModule } from './post/post.module';
 import { MulterModule } from '@nestjs/platform-express';
+import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { MulterModule } from '@nestjs/platform-express';
         dest: './upload',
       }),
     }),
+    CategoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],
