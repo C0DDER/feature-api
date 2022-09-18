@@ -1,4 +1,5 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { PostEntity } from "../post/post.entity";
 
 // TODO use env variables
 export const TypeOrmConfig: TypeOrmModuleOptions = {
@@ -8,6 +9,6 @@ export const TypeOrmConfig: TypeOrmModuleOptions = {
   username: 'postgres',
   password: 'root',
   database: 'features',
-  autoLoadEntities: true,
+  entities: [PostEntity],
   synchronize: true,
 };

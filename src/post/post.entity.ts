@@ -20,6 +20,9 @@ export class PostEntity extends BaseEntity {
   @Column({ nullable: true })
   category: string;
 
+  @Column({ nullable: true })
+  section: string;
+
   @Column()
   thumbnail: string;
 }

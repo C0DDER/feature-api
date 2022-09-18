@@ -14,7 +14,6 @@ import {
 import { CreatePostDto } from './post.dto';
 import { PostService } from './post.service';
 import {
-  FileFieldsInterceptor,
   FileInterceptor,
 } from '@nestjs/platform-express';
 import { PostEntity } from './post.entity';
@@ -45,16 +44,17 @@ export class PostController {
     return this.postService.getPostById(id);
   }
 
-  @Get('/')
+  @Get('/list/:category/:offset')
   getPosts(
-    @Body() body: { offset: number; category: string },
+    @Param('offset') offset: number,
+    @Param('category') category: string,
   ): Promise<PostEntity[]> {
-    return this.postService.getPosts(body.offset, body.category);
+    return this.postService.getPosts(offset, category);
   }
 
   @Patch('/:id')
   @UsePipes(ValidationPipe)
-  @UseInterceptors(FileFieldsInterceptor([{ name: 'file', maxCount: 1 }]))
+  @UseInterceptors(FileInterceptor('file'))
   updatePost(
     @Param('id') id: number,
     @Body() createPostDto: CreatePostDto,

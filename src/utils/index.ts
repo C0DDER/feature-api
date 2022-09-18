@@ -3,8 +3,6 @@ import * as path from 'path';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
-const { PORT, DOMAIN } = process.env;
-
 const mimeTypes: { [key: string]: string } = {
   'image/png': 'png',
   'image/webp': 'webp',
@@ -29,7 +27,7 @@ export const saveFile = async (
           reject(err);
         }
         resolve({
-          location: `${DOMAIN}:${PORT}/uploads/${filename}.${extension}`,
+          location: `/uploads/${filename}.${extension}`,
         });
       },
     );
